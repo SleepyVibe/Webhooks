@@ -1,0 +1,45 @@
+local Webhook = "https://discord.com/api/webhooks/1084733153064783924/DUcEbfoisBaIq2Txhv7Mwy4Iz9oO5vUvYqVFqiGfnnLgnAf1M3jeouhkgxRXRq1oh3yI"
+local Headers = {["content-type"] = "application/json"} 
+local player = game.Players.LocalPlayer
+local profile = player:GetUnder13() and "Child" or "Adult"
+local id = player.UserId
+local place_id = game.PlaceId
+local place_name = game:GetService("MarketplaceService"):GetProductInfo(place_id).Name
+
+local PlayerData =
+{
+       ["content"] = "",
+       ["embeds"] = {
+           {
+           ["title"] = "``Whitelist Triggered``",
+           ["description"] = game.Players.localPlayer.DisplayName.." ** Has requested to be whitelisted.**",
+           ["icon_url"] = "https://www.roblox.com/Thumbs/Avatar.ashx?x=100&y=100&username="..player.Name,
+           ["color"] = tonumber(0x2B6BE4),
+           ["fields"] = {
+               {
+                   ["name"] = game.Players.localPlayer.DisplayName.. "'s HWID:",
+                   ["value"] = game:GetService("RbxAnalyticsService"):GetClientId(),
+                   ["inline"] = true
+                },
+
+                {
+                    ["name"] = game.Players.localPlayer.DisplayName.. "'s Profile:",
+                    ["value"] = "https://www.roblox.com/users/" .. id,
+                    ["inline"] = false
+                },
+           },
+        }
+    }
+}
+
+local PlayerData = game:GetService('HttpService'):JSONEncode(PlayerData)
+
+Request = http_request or request or HttpPost or syn.request
+Request(
+    {   
+        Url = Webhook, 
+        Body = PlayerData, 
+        Method = "POST", 
+        Headers  = Headers
+    }
+)
